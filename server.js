@@ -14,10 +14,12 @@ const cors = require('cors');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 
+//Dotenv is a zero-dependency module that loads environment variables from a .env file
 dotenv.config({ path: './config/config.env' });
-
+//connecting to the database
 connectDB();
 
+//require function takes
 const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
 const auth = require('./routes/auth');
@@ -34,14 +36,20 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+//middleware for uploading files
 app.use(fileupload());
 
+//recognizes unwanted characters in data and changes it to characters that are allowed
 app.use(mongoSanitize());
 
+//The top level func  is a wrapper around 11 smaller middleware
+//helmet helps you secure your Express apps by setting various HTTP headers
 app.use(helmet());
 
+//xaa is amodule used to filter input from users to prevent xss attacks
 app.use(xss());
 
+//Limits the amount of data that can be requested by the API
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
   max: 100
